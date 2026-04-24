@@ -1,0 +1,18 @@
+merge_guard:
+  path_rules:
+    - name: "Auth changes require tests"
+      paths:
+        - "app/auth/**"
+        - "auth/**"
+      severity: "high"
+      message: "Changes in auth code must include tests before merge."
+      require_test_changes: true
+
+  pattern_rules:
+    - name: "Avoid raw SQL in handlers"
+      pattern: "execute("
+      paths:
+        - "app/handlers/**" 
+        - "handlers/**"
+      severity: "high"
+      message: "Raw query execution in handlers violates team policy."

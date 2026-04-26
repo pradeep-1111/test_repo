@@ -16,11 +16,19 @@ def create_app() -> FastAPI:
     app = FastAPI(title="MergeGuard", version="0.2.0")
     app.state.settings = settings
 
+    frontend_url = os.getenv("FRONTEND_URL")
+
+    allowed_origins = [
+    "http://localhost:5173",
+    "https://ai-merge-guard.vercel.app",
+]
+    if frontend_url:
+        allowed_origins.append(frontend_url.rstrip("/"))
+
+
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[
-            "http://localhost:5173",
-        ],
+        allow_origins=allowed_origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -38,6 +46,4 @@ def create_app() -> FastAPI:
         get_review_worker().stop()
 
     return app
-
-
 app = create_app()
